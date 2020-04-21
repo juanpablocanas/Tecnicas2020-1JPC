@@ -12,6 +12,7 @@ typedef enum meses_e{
    ENE, FEB, MAR, ABR, MAY, JUN, JUL, AGO, SEP, OCT, NOV, DIC
 }meses_e;
 
+/* Aquí realmente no estas usando los enums */
 const char* getMes(int mes){
  
    switch (mes){
@@ -59,6 +60,8 @@ int menu(){
    return opc;
 }
 
+/* Esta función no usa bn el concepto de recursión.  
+Para qué la recursión si todo lo haces en el while?*/
 int contarMes(int num){
    int cont = 0;
    while(num > 0){
@@ -73,6 +76,7 @@ int contarMes(int num){
 }
 
 
+/* La tabulacón del código debería mejorarse para que se vea mas ordenado*/
 int main(void){
    int opcion, posicion = 0, mesBuscar, mes, resultado, i, mesEnum, contador,mesTemp;
    Persona arreglo[ CAP ];
@@ -84,7 +88,7 @@ int main(void){
       opcion = menu();
       switch (opcion){
          case 1: 
-
+          // Ojo la identación esta muy fea en este pedazo de codigo
 		 		do{
 		 		printf("Digite su nombre: ");
                  scanf("%s", arreglo[ posicion ].nombre );
