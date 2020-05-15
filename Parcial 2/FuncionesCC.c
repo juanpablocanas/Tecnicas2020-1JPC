@@ -26,6 +26,24 @@ int validarPiso(int piso){
 	}
 }
 
+local ** reservarMemoriaCentroComercial(int numPiso, int numLocalxPiso){
+   int i;
+   local **centroComercial = malloc(numPiso * sizeof(local*));
+   if(centroComercial != NULL){
+      for(i = 0; i < numPiso; i++){
+         centroComercial[i] = malloc(numLocalxPiso * sizeof(local));
+         if(centroComercial[i] == NULL){
+            printf("Hubo un error \n");
+            break;
+         }
+      }
+   }
+   else{
+      printf("Hubo un error reservando \n");
+   }
+   return centroComercial; 
+}
+
 
 void agregarLocal(local arreglo[5][10], int counter[10], int ocupados[p][l]){
 	srand( time( NULL ) );

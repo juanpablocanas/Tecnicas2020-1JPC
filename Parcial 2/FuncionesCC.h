@@ -2,6 +2,8 @@
 #define FUNCIONESCC_H_
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdarg.h>
+#include "mongoose.h"
 const int p=5;
 const int l=10;
 //Local 
@@ -30,8 +32,10 @@ typedef enum categoria{
 
 
 /*Agregar las funciones que necesite para satisfacer los requerimientos */
-void mostrarLocal(local ** centroComercial, int numPiso,
-		int numLocalxPiso, int numPisos, int numLocalesxPiso);
+
+local **reservarMemoria(int numPiso, int numLocalxPiso);
+
+void iniciarCentroComercial(local ** centroComercial, int numPiso, int numLocalxPiso); 
 		
 void agregarLocal(local arreglo[5][10],int counter[10], int ocupados[p][l]);
 
