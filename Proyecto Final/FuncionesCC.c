@@ -5,19 +5,24 @@ int menu(){
    int opc;
    printf( "\n Centro Comercial CoronaVirus  ¡BIENVENIDO! \n" );
    printf( "============================\n" );
-   printf( "1 Agregar Local \n " );
-   printf( "2 Mostrar Locales \n ");
+   printf( "1 Agregar Local \n" );
+   printf( "2 Mostrar Locales \n");
    printf( "3 Buscar Local Nombre \n" );
    printf( "4 Mostrar Locales Piso  \n" );
     printf( "5 Cambiar Nombre  \n" );
    printf( "6 Recursion Contar Locales \n" );
    printf( "7 Agregar Deudores \n" );
    printf( "8 Sortear Numero Trabajadores \n" );
+   	printf("\n ");
    printf( "Funciones Queue \n" );printf( "================== \n" );
-   printf( "9 Queue Put \n" );
-   printf( "10 Queue Entra CC \n" );
-   printf( "11 Queue Display \n" );
-   printf( "12 Queue Borrar \n" );
+   printf( "9  Entra a Fila \n" );
+   printf( "10  Entra CC \n" );
+   printf( "11  Display fila \n" );
+   printf( "12 Fila Borrar Todo \n" );
+   printf( "================== \n \n" );
+   printf( "13 Save Centro Comericial \n" );
+   printf( "14 Sortear Inventario \n" );
+   printf("\n \n ");
    printf( "Digite su opcion por favor \n" );
    printf( "0 para salir \n" );
    printf("==>"); scanf( "%d", &opc );
@@ -63,16 +68,11 @@ local** crearCC(int pisos, int localesPiso)
         for (j = 0; j < localesPiso; j++)
             //Inicia todos los id en 0 para representar que los locales estan vacios
             arreglo[i][j].idLocal = 0;
-            printf("Entro");
+            
     }
 
     return arreglo;
 }
-
-
-
-
-
 
 
 void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
@@ -80,8 +80,12 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	
 	
 	
-	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat;
-	
+	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat,inventario,count;
+	FILE    *fileCont;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); //Guardo lo que esta en el arhhivo cont.txt y se lo pongo q int count
+    printf("Contador antes: %d",count);
+	fclose(fileCont);
 	 idLocal=rand()/10;
 	
 	printf("Piso: "); 
@@ -91,13 +95,20 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	}
 		
 	printf("Local: "); scanf("%d", &localDeseado);
-	printf("Categoria: "); scanf("%d", &cat);
-	printf("Numero empleados: "); scanf("%d", &numEmpleados);
-	
-	
-	
 	pisoDeseado--;
 	localDeseado--;
+	//Resto para poder trabajarlos como indices en la matriz
+	
+	if(arreglo[pisoDeseado][localDeseado].idLocal!=0){
+		printf("El local ya esta ocupado intente de nuevo");
+		return;
+	}
+	printf("Categoria: "); scanf("%d", &cat);
+	printf("Numero empleados: "); scanf("%d", &numEmpleados);
+	printf("Inventario: "); scanf("%d", &inventario);
+	
+	
+	
 
 	
 	printf("Nombre: "); 
@@ -109,22 +120,36 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	printf("\n");
 	arreglo[pisoDeseado][localDeseado].categoria = cat;
 	arreglo[pisoDeseado][localDeseado].numEmpleados = numEmpleados;
+	arreglo[pisoDeseado][localDeseado].inventario= inventario;
 	
 	*cantLocales=*cantLocales+1;
+	
 	FILE    *fileTrabajadores;
     fileTrabajadores = fopen("Trabajadores.txt", "ab");
-
 	fprintf(fileTrabajadores, " %d  ", numEmpleados);
 	fclose(fileTrabajadores);
 	printf("\n");
 	
-	printf("%d",*cantLocales);
+	
+	FILE    *fileInventario;
+    fileInventario = fopen("Inventario.txt", "ab");
+	fprintf(fileTrabajadores, " %d  ", inventario);
+	fclose(fileInventario);
+	
+	fileCont = fopen("Cont.txt", "w");
+	count=count+1;
+    fprintf(fileCont, "%d", count);
+	//fprintf(fileCont, " %d  ", *cantLocales);
+	printf("Contador despues: %d",count);
+	fclose(fileCont);
+	
+	//printf("%d",*cantLocales);
 	
 	return;
 }
 
 void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
-	int i,j;
+	int i,j,cat;
 
 	for(i=0;i<pisos;i++){
 		for(j=0;j<localesPiso;j++){
@@ -133,8 +158,12 @@ void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
 				printf("Nombre: %s ",arreglo[i][j].nombreLocal);
 				printf("Piso: %d ",arreglo[i][j].pisoLocal+1);
 				printf("Num Local %d ",arreglo[i][j].numLocalxPiso+1);
+				//cat=getCategoria(arreglo[i][j].categoria);
+				//printf("%d",cat);
 				//printf("Categoria %d", getCategoria(&arreglo[i][j].categoria));
 				printf("ID Unico %d ",arreglo[i][j].idLocal);
+				printf("Num Empleados: %d ",arreglo[i][j].numEmpleados);
+				printf("Inventario: %d ",arreglo[i][j].inventario);
 				printf("\n \n");
 				}
 			
@@ -146,17 +175,16 @@ void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
 void mostrarLocalesPiso(local **arreglo,int pisos){
 	int i;
 	int pisoBuscar=0;
-	printf("Ingrese el numero de piso para mostrar locales en ese piso");scanf("%d",&pisoBuscar);
-	if(validarPiso(pisoBuscar)){
-		printf("En el piso %d se encuentran los siguientes locales: \n",pisoBuscar);
+	printf("Ingrese el numero de piso para mostrar locales en ese piso: ");scanf("%d",&pisoBuscar);
+	pisoBuscar=pisoBuscar-1;
 	for(i=0;i<pisos;i++){
-		
-		printf(" %s: ",arreglo[pisoBuscar][i].nombreLocal);
+		if(arreglo[pisoBuscar][i].idLocal!=0){
+		printf(" %s ",arreglo[pisoBuscar][i].nombreLocal);
 		printf("\n ");
 	}
 	}
 }
-	
+
 
 void buscarLocalNombre(local **arreglo, int pisos, int localesPiso){
 	int i,j;
@@ -230,8 +258,7 @@ void agregarDeudores(local **arreglo){
 	fprintf(ff, "=====================================");
 	fprintf(ff, "\n \n");
 
-     
-    
+
 
     fclose(ff);
     
@@ -241,24 +268,63 @@ void agregarDeudores(local **arreglo){
 void ordenarTrabajadores(local **arreglo,int* cantLocales ){
 	FILE    *f;
 	printf("Cantidad locales: %d",cantLocales);
-    int     array[2];
+	int tam=cantLocales; //Cantidad de locales para saber cuantas iteraciones hago
+    int   array[tam];
     int     i, j, ctr = 0;
 	int n = sizeof(array)/sizeof(array[0]); 
     f = fopen("Trabajadores.txt", "a+");
 
-    while((!feof(f)) && (ctr < 2))
+    while((!feof(f)) && (ctr < tam))
     {
-        fscanf(f, "%d ", &array[ctr++]);
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
     }
-    
-	quickSort(array,0,n-1);
+    quickSort(array,0,n-1);
 	fprintf(f, "Sorteado:   ");
-	for(j=0;j<2;j++){
+	for(j=0;j<tam;j++){
 	fprintf(f, "%d  ", array[j]);
 
      }
 	fclose(f); 
 }
+
+void ordenarInventario(local **arreglo,int* cantLocales ){
+	FILE    *f;
+	int x=0;
+	printf("Cantidad locales: %d",cantLocales);
+	int tam=cantLocales; //Cantidad de locales para saber cuantas iteraciones hago
+    int   array[tam];
+    int     i, j, ctr = 0;
+	int n = sizeof(array)/sizeof(array[0]); 
+    f = fopen("Inventario.txt", "a+");
+
+    while((!feof(f)) && (ctr < tam))
+    {
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
+    }
+    
+	insertionSort(array,n);
+	fprintf(f, "Sorteado:   ");
+	for(j=0;j<tam;j++){
+	fprintf(f, "%d  ", array[j]); //Imprimo array sorteado en el archivo
+     }
+	fclose(f); 
+}
+    
+
+
+void save ( local **arreglo ,char* fn ){
+	FILE *f = fopen( fn, "wb" );
+	fwrite( arreglo,sizeof( *arreglo ), 1, f );
+	fclose( f );	
+}
+
+
+void load ( local **arreglo ,char* fn ){
+	FILE *f = fopen(fn,"rb");
+	fread( arreglo,sizeof( *arreglo ), 1 ,f );
+	fclose( f );	
+}
+
 
 
 

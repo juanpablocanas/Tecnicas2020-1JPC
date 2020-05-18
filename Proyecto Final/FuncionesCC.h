@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "quickSort.h"
+#include "Sorts.h"
 #include "arrayqueueConsumidor.h"
 
 
@@ -16,7 +16,8 @@ typedef struct Local{
 	int pisoLocal;
 	int numLocalxPiso;
 	int categoria;
-	int numEmpleados
+	int numEmpleados;
+	int inventario;
 	// Completelo con lo que quiera
 } local;
 
