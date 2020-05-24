@@ -1,8 +1,0 @@
-Registrado a hora: 2020-05-14 22:56:20 
-
- Nombre adidas  Piso: 0 Num Local 0 ID Unico 624 =====================================
- 
-Registrado a hora: 2020-05-14 22:57:11 
-
- Nombre nike  Piso: 1 Num Local 0 ID Unico 666 =====================================
- 

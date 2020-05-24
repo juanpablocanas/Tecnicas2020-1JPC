@@ -22,11 +22,9 @@ struct Queue{
    type_d a[ CAP ];
    int front, rear, n;
    void (*put) ( Queue *, type_d );
-   void (*delete) ( Queue * );
+   void (*del) ( Queue * );
    void (*display) ( Queue * );
    int (*empty) ( Queue * );
-   
-  
 };
 
 void put( Queue * x, type_d e ){
@@ -40,11 +38,7 @@ void put( Queue * x, type_d e ){
    return;
 }
 
-void delete( Queue * x ){
-   if( empty( x ) ){
-      fprintf( stderr, "Error: Queue is empty\n" );
-      return;
-   }
+void del( Queue * x ){
    x->front = ( x->front + 1 ) % CAP;
    x->n--;
    return;
@@ -72,7 +66,7 @@ Queue createQueue( ){
    Queue q;
    q.front = q.rear = q.n = 0;
    q.put = &put;
-   q.delete = &delete;
+   q.del = &del;
    q.display = &display;
    q.empty = &empty;
    

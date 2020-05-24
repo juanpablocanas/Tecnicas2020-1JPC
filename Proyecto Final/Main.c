@@ -2,32 +2,50 @@
 
 
 int main(){
-
-   int counter[10]={0};
-   int id=5;
-   int n=sizeof(counter)/sizeof(counter[0]);
-   
-  int cantLocales=0;
-  
-   
-   
-   int pisos, localesPiso;
-    printf("Numero de pisos: ");
-    scanf("%d", &pisos);
-    printf("Numero de locales por piso: ");
-    scanf("%d", &localesPiso);
-    local** arreglo = crearCC(pisos, localesPiso);
- 	int ocupados=malloc(sizeof(int) * pisos);
+	int cargar;
+	int pisos, localesPiso;
+	local **arreglo;
+	
+	do{
+		printf("Cargar Arhivo? 1.Si  2.No");
+		scanf("%d",&cargar);
+		switch(cargar){
+			case 1: ;
+				FILE *filePisosr = fopen("NumPisos.txt","r");
+				FILE *fileLocalesr = fopen("NumLocales.txt","r");
+				fscanf(filePisosr,"%d",&pisos);
+				fscanf(fileLocalesr,"%d",&localesPiso);
+				fclose(filePisosr); fclose(fileLocalesr);
+				arreglo= crearCC(pisos,localesPiso);
+				loadCC(arreglo,pisos,localesPiso,"CentroC.dat");
+				break;
+				
+			case 2: ;
+				FILE *fileDatos= fopen("CentroC.dat","w");
+				fclose(fileDatos);
+				printf("Numero de pisos: ");
+    			scanf("%d", &pisos);
+    			printf("Numero de locales por piso: ");
+    			scanf("%d", &localesPiso);
+    			FILE *filePisosw = fopen("NumPisos.txt","w");
+				FILE *fileLocalesw = fopen("NumLocales.txt","w");
+				fprintf(filePisosw,"%d", pisos);
+				fprintf(fileLocalesw,"%d", localesPiso);
+				arreglo = crearCC(pisos, localesPiso);
+				fclose(filePisosw); fclose(fileLocalesw);
+				break;
+		}
+	}while(cargar > 2 || cargar < 1);
+	
  	Queue fila = createQueue();
  	consumidor c;
- 	
- 	load(&arreglo,"Locales.dat");
+ 
    int opcion;
    do{
 	  opcion=menu();
       switch(opcion){
          case 1:
-            agregarLocal(arreglo,pisos,localesPiso,&cantLocales);
+            agregarLocal(arreglo,pisos,localesPiso);
             break;
          case 2:
          	mostrarTodosLocal(arreglo,pisos,localesPiso);
@@ -39,17 +57,16 @@ int main(){
           	mostrarLocalesPiso(arreglo,pisos);
           	break;
           case 5:
-          	cambiarNombre(arreglo);
+          	cambiarNombre(arreglo,pisos,localesPiso);
           	break;
           case 6:
-          	printf("Hay %d Locales ", contarNumLocales(ocupados,0,0));
-          	break;
+          	
           case 7:
           	agregarDeudores(arreglo);
           	printf("Se han agregado. Vea el TXT");
           	break;
           case 8:
-          	ordenarTrabajadores(arreglo,cantLocales);
+          	ordenarTrabajadoresQuickSort(arreglo);
           	printf("Se han ordenado. Vea el TXT");
           	break;
           case 9:
@@ -57,27 +74,30 @@ int main(){
 				printf( "Ingrese id consumidor: " ); scanf("%d", &c.id);
 				printf( "Ingrese  edad consumidor: " ); scanf("%d", &c.edad);
 				fila.put(&fila,c);
-          	
           	break;
            case 10:	
-				fila.delete( &fila );
+				fila.del( &fila );
 				printf( "La persona ha entrado al centro comercial \n" );
 				break;
           	case 11:
 				fila.display(&fila);
 				break;
 			case 12:
-				fila.delete(&fila);
+				fila.empty(&fila);
 				printf("Se han borrado toda la fila");
           		break;
 			case 13:
-				save(&arreglo,"Locales.dat");
+				saveCC(arreglo,pisos,localesPiso,"CentroC.dat");				
 				printf("Se ha guardado");
           		break;
           	case 14:
-          		ordenarInventario(arreglo,cantLocales);
+          		ordenarInventario(arreglo);
           		printf("Se han ordenado. Vea el TXT");
           		break;
+          	case 15:
+          		ordenarVentas(arreglo);
+          		break;
+          	
  
       }
    }while(opcion!=0);

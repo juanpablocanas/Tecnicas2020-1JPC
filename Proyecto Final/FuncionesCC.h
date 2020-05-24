@@ -2,10 +2,23 @@
 #define FUNCIONESCC_H_
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h> 
 #include <time.h>
 #include "Sorts.h"
 #include "arrayqueueConsumidor.h"
+//#include <stdexcept>
 
+typedef enum categoria{
+   ROPA, HOGAR, ELECTRODOMESTICOS
+}categoria_e;
+
+typedef enum coronaFree{
+   libre, noLibre
+}corona_free_e;
+
+typedef enum opc_validacion{
+ 	POSITIVO, MINIMO, MAXIMO
+}opc_validacion_e;
 
 const int p=5;
 const int l=10;
@@ -15,15 +28,13 @@ typedef struct Local{
 	int idLocal; // Calculado automaticamente por su programa
 	int pisoLocal;
 	int numLocalxPiso;
-	int categoria;
+	categoria_e categoria;
 	int numEmpleados;
 	int inventario;
+	int ventas;
 	// Completelo con lo que quiera
 } local;
 
-typedef enum categoria{
-   ROPA, HOGAR, ELECTRODOMESTICOS
-}categoria;
 
  char* getCategoria(int cat){
  
@@ -42,7 +53,7 @@ local **reservarMemoria(int numPiso, int numLocalxPiso);
 
 void iniciarCentroComercial(local ** centroComercial, int numPiso, int numLocalxPiso); 
 		
-void agregarLocal(local **arreglo, int pisos, int localesPiso,int *cantLocales);
+void agregarLocal(local **arreglo, int pisos, int localesPiso);
 
 void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso);
 
@@ -50,7 +61,7 @@ void buscarLocalNombre(local **arreglo, int pisos, int localesPiso);
 
 void mostrarLocalesPiso(local **arreglo,int pisos);
 
-void cambiarNombre(local **arreglo);
+void cambiarNombre(local **arreglo,int pisos, int localesPiso);
 
 int contarNumLocales(int **ocupados,int i,int j);
 

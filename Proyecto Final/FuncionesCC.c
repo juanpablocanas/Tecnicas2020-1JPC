@@ -3,16 +3,16 @@
 
 int menu(){
    int opc;
-   printf( "\n Centro Comercial CoronaVirus  ¡BIENVENIDO! \n" );
+   printf( "\n  ¡BIENVENIDO! \n" );
+																									
    printf( "============================\n" );
    printf( "1 Agregar Local \n" );
    printf( "2 Mostrar Locales \n");
    printf( "3 Buscar Local Nombre \n" );
    printf( "4 Mostrar Locales Piso  \n" );
     printf( "5 Cambiar Nombre  \n" );
-   printf( "6 Recursion Contar Locales \n" );
    printf( "7 Agregar Deudores \n" );
-   printf( "8 Sortear Numero Trabajadores \n" );
+   printf( "8 Sortear Numero Trabajadores (QuickSort) \n" );
    	printf("\n ");
    printf( "Funciones Queue \n" );printf( "================== \n" );
    printf( "9  Entra a Fila \n" );
@@ -21,23 +21,63 @@ int menu(){
    printf( "12 Fila Borrar Todo \n" );
    printf( "================== \n \n" );
    printf( "13 Save Centro Comericial \n" );
-   printf( "14 Sortear Inventario \n" );
+   printf( "14 Sortear Inventario (InsertionSort) \n" );
+   printf( "15 Sortear Ventas (MergeSort) \n" );
    printf("\n \n ");
    printf( "Digite su opcion por favor \n" );
    printf( "0 para salir \n" );
    printf("==>"); scanf( "%d", &opc );
    return opc;
 }
-
-int validarPiso(int piso){
-	if(piso<5){
-		return 1;
-	}
-	else{
-		return 0;
-	}
+/*
+void validarNumeros(int num, opc_validacion_e opcValidacion){ //Para inventario y Trabajadores
+  
+  switch (opcValidacion){
+  	case POSITIVO: 
+	    if (num < 0){
+    		throw std::logic_error ("El número debe ser positivo \n");
+  	    }
+  	    break;
+  	case MINIMO: 
+  		if (num < 10){
+    		throw std::logic_error ("Para este CC se necesitan máss de 11 para poder registrarse \n");
+  	    }
+		break;	
+}
 }
 
+void validarPiso(int num, opc_validacion_e opcValidacion,int pisos){
+  
+  switch (opcValidacion){
+  	case POSITIVO: 
+	    if (num < 0){
+    		throw std::logic_error ("El número debe ser positivo \n");
+  	    }
+  	    break;
+  	case MAXIMO: 
+  		if (num > pisos){
+    		throw std::logic_error ("Su numero se pasa del máximo pisos del CC \n");
+  	    }
+		break;	
+}
+}
+
+void validarLocalesPiso(int num, opc_validacion_e opcValidacion,int localesPiso){
+  
+  switch (opcValidacion){
+  	case POSITIVO: 
+	    if (num < 0){
+    		throw std::logic_error ("El número debe ser positivo \n");
+  	    }
+  	    break;
+  	case MAXIMO: 
+  		if (num > localesPiso){
+    		throw std::logic_error ("Su numero se pasa del máximo locales por piso del CC \n");
+  	    }
+		break;	
+}
+}
+*/
 local ** reservarMemoriaCentroComercial(int numPiso, int numLocalxPiso){
    int i;
    local **centroComercial = malloc(numPiso * sizeof(local*));
@@ -75,26 +115,32 @@ local** crearCC(int pisos, int localesPiso)
 }
 
 
-void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
+void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	srand( time( NULL ) );
 	
 	
 	
-	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat,inventario,count;
+	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat,inventario,count,ventas;
 	FILE    *fileCont;
     fileCont = fopen("Cont.txt", "r+");
-    fscanf(fileCont, "%d", &count); //Guardo lo que esta en el arhhivo cont.txt y se lo pongo q int count
-    printf("Contador antes: %d",count);
-	fclose(fileCont);
+    fscanf(fileCont, "%d", &count); //Guardo lo que esta en el arhhivo cont.txt y se lo pongo   count
+    //printf("Contador antes: %d",count);
+	fclose(fileCont); // Cierro el archivo ya que lo tengo que abrir en W
+					 // 
 	 idLocal=rand()/10;
 	
 	printf("Piso: "); 
 	scanf("%d", &pisoDeseado);
-	if(pisoDeseado>pisos){
-		//throw std::out_of_range;
-	}
-		
-	printf("Local: "); scanf("%d", &localDeseado);
+	//validarPiso(*pisoDeseado, POSITIVO);
+	//validarPiso(*pisoDeseado, MAXIMO);
+	
+	
+	
+	printf("Local: "); 
+	scanf("%d", &localDeseado);
+	//validarLocalesPiso(*pisoDeseado, POSITIVO,pisos);
+	//validarLocalesPiso(*pisoDeseado, MAXIMO,localesPiso);
+	
 	pisoDeseado--;
 	localDeseado--;
 	//Resto para poder trabajarlos como indices en la matriz
@@ -104,8 +150,13 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 		return;
 	}
 	printf("Categoria: "); scanf("%d", &cat);
-	printf("Numero empleados: "); scanf("%d", &numEmpleados);
+	printf("Numero empleados: "); scanf("%d", &numEmpleados); 
+	//validarNumeros(*numEmpleados, POSITIVO);
+	//validarNumeros(*numEmpleados, MINIMO);
 	printf("Inventario: "); scanf("%d", &inventario);
+	printf("Ventas: "); scanf("%d", &ventas);
+	//validarNumeros(*inventario, POSITIVO);
+	//validarNumeros(*inventario, MINIMO);
 	
 	
 	
@@ -122,7 +173,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	arreglo[pisoDeseado][localDeseado].numEmpleados = numEmpleados;
 	arreglo[pisoDeseado][localDeseado].inventario= inventario;
 	
-	*cantLocales=*cantLocales+1;
+	
 	
 	FILE    *fileTrabajadores;
     fileTrabajadores = fopen("Trabajadores.txt", "ab");
@@ -136,6 +187,11 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	fprintf(fileTrabajadores, " %d  ", inventario);
 	fclose(fileInventario);
 	
+	FILE    *fileVentas;
+    fileVentas = fopen("Ventas.txt", "ab");
+	fprintf(fileVentas, " %d  ", ventas);
+	fclose(fileVentas);
+	
 	fileCont = fopen("Cont.txt", "w");
 	count=count+1;
     fprintf(fileCont, "%d", count);
@@ -143,7 +199,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso,int* cantLocales){
 	printf("Contador despues: %d",count);
 	fclose(fileCont);
 	
-	//printf("%d",*cantLocales);
+	
 	
 	return;
 }
@@ -164,6 +220,7 @@ void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
 				printf("ID Unico %d ",arreglo[i][j].idLocal);
 				printf("Num Empleados: %d ",arreglo[i][j].numEmpleados);
 				printf("Inventario: %d ",arreglo[i][j].inventario);
+				
 				printf("\n \n");
 				}
 			
@@ -206,11 +263,16 @@ void buscarLocalNombre(local **arreglo, int pisos, int localesPiso){
   return;
 }
 
-int contarNumLocales(int **ocupados,int i,int j){
-	if(i>4){
+int contarNumLocales(int **ocupados,int pisos, int localesPiso){
+	FILE    *fileCont; //Contador Locales
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+	int i,j;
+	if(i>pisos){
 		return 0;
 	}
-	else if(j>9){
+	else if(j>localesPiso){
 		contarNumLocales(ocupados,i+1,0);
 	}
 	else {
@@ -220,14 +282,14 @@ int contarNumLocales(int **ocupados,int i,int j){
 
 
 
-void cambiarNombre(local **arreglo){
+void cambiarNombre(local **arreglo,int pisos, int localesPiso){
 	char name[25];
 	char nameCambiar[25];
   printf("Ingrese el nombre del local a buscar: ");
   scanf("%s", name);
 	int i,j;
-	for(i = 0; i < 5; i++){
-    for(j = 0; j < 10; j++){
+	for(i = 0; i < pisos; i++){
+    for(j = 0; j < localesPiso; j++){
 	if(!strcmp(arreglo[i][j].nombreLocal, name) ){
         printf("El local %s fue encontrado exitosamente en el sistema\n", arreglo[i][j].nombreLocal);
         printf("Ingrese el NUEVO nombre del local : ");
@@ -257,73 +319,231 @@ void agregarDeudores(local **arreglo){
 	fprintf(ff,"ID Unico %d ",arreglo[i][j].idLocal);
 	fprintf(ff, "=====================================");
 	fprintf(ff, "\n \n");
-
-
-
-    fclose(ff);
-    
-	
+    fclose(ff);	
 }
 
-void ordenarTrabajadores(local **arreglo,int* cantLocales ){
-	FILE    *f;
-	printf("Cantidad locales: %d",cantLocales);
-	int tam=cantLocales; //Cantidad de locales para saber cuantas iteraciones hago
-    int   array[tam];
+void ordenarTrabajadoresQuickSort(local **arreglo ){
+	FILE    *f; //Trabajodres Guardados
+	FILE    *fs; //Trabajadores Sorteado
+	FILE    *fileCont; //Contador Locales
+	
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+	
+    int   array[count];
     int     i, j, ctr = 0;
 	int n = sizeof(array)/sizeof(array[0]); 
     f = fopen("Trabajadores.txt", "a+");
-
-    while((!feof(f)) && (ctr < tam))
+	fs = fopen("TrabajadoresSorteado.txt", "a+");
+    while((!feof(f)) && (ctr < count))
     {
         fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
     }
     quickSort(array,0,n-1);
-	fprintf(f, "Sorteado:   ");
-	for(j=0;j<tam;j++){
-	fprintf(f, "%d  ", array[j]);
-
+	fprintf(fs, "Sorteado:   ");
+	for(j=0;j<count;j++){
+		fprintf(fs, "%d  ", array[j]);
      }
 	fclose(f); 
+	fclose(fs); 
+	fclose(fileCont);
 }
 
-void ordenarInventario(local **arreglo,int* cantLocales ){
+void ordenarInventario(local **arreglo ){
 	FILE    *f;
-	int x=0;
-	printf("Cantidad locales: %d",cantLocales);
-	int tam=cantLocales; //Cantidad de locales para saber cuantas iteraciones hago
-    int   array[tam];
+	FILE    *fs;
+	FILE    *fileCont;
+	
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+	
+    int   array[count];
     int     i, j, ctr = 0;
 	int n = sizeof(array)/sizeof(array[0]); 
     f = fopen("Inventario.txt", "a+");
+    fs = fopen("InventarioSorteado.txt", "a+");
 
-    while((!feof(f)) && (ctr < tam))
+    while((!feof(f)) && (ctr < count))
     {
         fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
     }
     
 	insertionSort(array,n);
-	fprintf(f, "Sorteado:   ");
-	for(j=0;j<tam;j++){
-	fprintf(f, "%d  ", array[j]); //Imprimo array sorteado en el archivo
+	fprintf(fs, "Sorteado:   ");
+	for(j=0;j<count;j++){
+		fprintf(fs, "%d  ", array[j]); //Imprimo array sorteado en el archivo
      }
 	fclose(f); 
+	fclose(fs); 
+	fclose(fileCont);
+}
+
+void ordenarVentas(local **arreglo ){
+	FILE    *f;
+	FILE    *fs;
+	FILE    *fileCont;
+	
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+	
+    int   array[count];
+    int     i, j, ctr = 0;
+	int n = sizeof(array)/sizeof(array[0]); 
+    f = fopen("Ventas.txt", "a+");
+    fs = fopen("VentasSorteado.txt", "a+");
+
+    while((!feof(f)) && (ctr < count))
+    {
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
+    }
+    
+	mergeSort(array,0,count-1);
+	fprintf(fs, "Sorteado:   ");
+	for(j=0;j<count;j++){
+		fprintf(fs, "%d  ", array[j]); //Imprimo array sorteado en el archivo
+     }
+	fclose(f); 
+	fclose(fs); 
+	fclose(fileCont);
+}
+
+void saveCC(local **arreglo, int pisos, int localesPiso, char* fn){
+    int i, j;
+    local currentLoc;
+    FILE *f = fopen(fn,"wb");
+
+    if (f == NULL){
+        printf("Error! opening file");
+
+       
+           exit(1);
+   }
+
+   for(i = 0; i < pisos; i++){
+           for(j = 0; j < localesPiso; j++){
+               if(arreglo[i][j].idLocal != 0){
+                   currentLoc = arreglo[i][j];
+                   fwrite(&currentLoc, sizeof(local), 1, f); 
+                   printf("Guardado: %s", currentLoc.nombreLocal);
+            }
+
+           }
+
+
+   }
+   fclose(f); 
+   printf("Se ha guardado todo el CC");
+
+}
+
+void loadCC(local **arreglo, int pisos, int localesPiso, char* fn){
+    int i, j;
+    FILE *f = fopen(fn,"rb");
+    FILE    *fileCont;
+	
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+    
+    local currentLoc;
+       if (f == NULL){
+       printf("Error! opening file");
+
+       
+       exit(1);
+   }
+    	for(i=0;i<count;i++){
+		printf("Entro a la ballenita");
+		fread(&currentLoc, sizeof(local), 1, f); 
+        arreglo[currentLoc.pisoLocal][currentLoc.numLocalxPiso] = currentLoc;
+        printf("Cargo: %s", currentLoc.nombreLocal);
+		}
+        
+    
+    fclose(f);
+
 }
     
 
-
+/*
 void save ( local **arreglo ,char* fn ){
 	FILE *f = fopen( fn, "wb" );
-	fwrite( arreglo,sizeof( *arreglo ), 1, f );
+	
+	fwrite( &arreglo,sizeof( *arreglo ), 1, f );
+	if(fwrite != 0)  
+        printf("contents to file written successfully !\n"); 
+    else 
+        printf("error writing file !\n"); 
 	fclose( f );	
+}
+
+void saveCC( local **arreglo ,char* fn,int pisos, int localesPiso ){
+	FILE* f=fopen(fn,"w");
+	int i,j;
+	local * currentLoc= malloc(sizeof(local));
+	for(i=0;i<pisos;i++){
+		for(j=0;j<localesPiso;j++){
+			if(arreglo[i][j].idLocal!=0){
+			strcpy(currentLoc->nombreLocal,arreglo[i][j].nombreLocal);
+			
+			currentLoc->idLocal= arreglo[i][j].idLocal;
+			currentLoc->numLocalxPiso= arreglo[i][j].numLocalxPiso;
+			currentLoc->categoria= arreglo[i][j].categoria;
+			currentLoc->numEmpleados= arreglo[i][j].numEmpleados;
+			currentLoc->inventario= arreglo[i][j].inventario;
+			currentLoc->ventas= arreglo[i][j].ventas;
+			}	
+		}
+	}
+	if(f!=NULL){
+		fwrite(currentLoc,sizeof(local),1,f);
+	}
+}
+
+void loadCC(local **arreglo ,char* fn,int pisos, int localesPiso){
+	local * currentLoc= malloc(sizeof(local));
+	FILE* f=fopen(fn,"w");
+	if(f!=NULL){
+		while(!feof(f)){
+			fread(currentLoc,sizeof(local),1,f);
+		}
+		
+	}
+	
 }
 
 
 void load ( local **arreglo ,char* fn ){
 	FILE *f = fopen(fn,"rb");
-	fread( arreglo,sizeof( *arreglo ), 1 ,f );
+	fread( &arreglo,sizeof( *arreglo ), 1 ,f );
+	if (fn == NULL) 
+    { 
+        fprintf(stderr, "\nError opening file\n"); 
+        exit (1); 
+    }
+	else{
+		printf("contents of file read successfully !\n"); 
+	}
+	     
 	fclose( f );	
 }
+
+void saveText( local **arreglo ,char* fn,int pisos, int localesPiso ){
+	FILE *f = fopen( fn, "w" );
+	int i,j;
+	fwrite( &arreglo,sizeof( *arreglo ), 1, f );
+	if(fwrite != 0)  
+        printf("contents to file written successfully !\n"); 
+    else 
+        printf("error writing file !\n"); 
+	fclose( f );	
+}
+
+*/
+
 
 
 
