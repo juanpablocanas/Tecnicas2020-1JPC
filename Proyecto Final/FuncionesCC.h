@@ -30,6 +30,7 @@ typedef struct Local{
 	int numEmpleados;
 	int inventario;
 	int ventas;
+	int rangoPrecio;
 	
 	
 	
@@ -52,6 +53,8 @@ typedef struct Local{
 
 local **reservarMemoria(int numPiso, int numLocalxPiso);
 
+local** crearCC(int pisos, int localesPiso);
+
 void iniciarCentroComercial(local ** centroComercial, int numPiso, int numLocalxPiso); 
 		
 void agregarLocal(local **arreglo, int pisos, int localesPiso);
@@ -64,8 +67,19 @@ void mostrarLocalesPiso(local **arreglo,int pisos);
 
 void cambiarNombre(local **arreglo,int pisos, int localesPiso);
 
-int contarNumLocales(int **ocupados,int i,int j);
+void agregarDeudores(local **arreglo);
 
+void ordenarTrabajadoresQuickSort(local **arreglo );
+
+void ordenarInventario(local **arreglo );
+
+void ordenarVentas(local **arreglo );
+
+void ordenarRangoPrecios(local **arreglo );
+
+void saveCC(local **arreglo, int pisos, int localesPiso, char* fn);
+
+void loadCC(local **arreglo, int pisos, int localesPiso, char* fn);
 
 
 int menu();

@@ -3,8 +3,11 @@
 
 int menu(){
    int opc;
-   printf( "\n  ¡BIENVENIDO! \n" );
-																									
+   printf("\n  ¡BIENVENIDO! \n" );
+    printf("__              __\n" );                 
+printf("/   _ ___|____  /   _ __  _ ___o _ |\n" ); 
+printf("\__(/_| ||_|(_) \__(_)|||(/_|(_|(_||\n" ); 
+
    printf( "============================\n" );
    printf( "1 Agregar Local \n" );
    printf( "2 Mostrar Locales \n");
@@ -23,6 +26,7 @@ int menu(){
    printf( "13 Save Centro Comericial \n" );
    printf( "14 Sortear Inventario (InsertionSort) \n" );
    printf( "15 Sortear Ventas (MergeSort) \n" );
+   printf( "16 Sortear Rango Precio (SelectionSort) \n" );
    printf("\n \n ");
    printf( "Digite su opcion por favor \n" );
    printf( "0 para salir \n" );
@@ -120,7 +124,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	
 	
 	
-	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat,inventario,count,ventas;
+	int pisoDeseado,localDeseado,  idLocal, numEmpleados,cat,inventario,count,ventas,rangoPrecio;
 	FILE    *fileCont;
     fileCont = fopen("Cont.txt", "r+");
     fscanf(fileCont, "%d", &count); //Guardo lo que esta en el arhhivo cont.txt y se lo pongo   count
@@ -154,6 +158,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	//validarNumeros(*numEmpleados, MINIMO);
 	printf("Inventario: "); scanf("%d", &inventario);
 	printf("Ventas: "); scanf("%d", &ventas);
+	printf("Rango de Precio (1.Barato 5.Caro)"); scanf("%d", &rangoPrecio);
 	//validarNumeros(*inventario, POSITIVO);
 	//validarNumeros(*inventario, MINIMO);
 	
@@ -181,6 +186,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	arreglo[pisoDeseado][localDeseado].numEmpleados = numEmpleados;
 	arreglo[pisoDeseado][localDeseado].inventario= inventario;
 	arreglo[pisoDeseado][localDeseado].ventas=ventas;
+	arreglo[pisoDeseado][localDeseado].rangoPrecio=rangoPrecio;
 	
 	
 	
@@ -201,6 +207,12 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
     fileVentas = fopen("Ventas.txt", "ab");
 	fprintf(fileVentas, " %d  ", ventas);
 	fclose(fileVentas);
+	//Guardo el numero de ventas para organizar despues
+	
+	FILE    *fileRangoPrecio;
+    fileRangoPrecio = fopen("RangoPrecio.txt", "ab");
+	fprintf(fileVentas, " %d  ", rangoPrecio);
+	fclose(fileRangoPrecio);
 	//Guardo el numero de ventas para organizar despues
 	
 	fileCont = fopen("Cont.txt", "w");
@@ -231,7 +243,7 @@ void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
 				printf("ID Unico %d ",arreglo[i][j].idLocal);
 				printf("Num Empleados: %d ",arreglo[i][j].numEmpleados);
 				printf("Inventario: %d ",arreglo[i][j].inventario);
-				
+				printf("Rango Precio: %d ",arreglo[i][j].rangoPrecio);
 				printf("\n \n");
 				}
 			
@@ -344,7 +356,7 @@ void ordenarTrabajadoresQuickSort(local **arreglo ){
 	
     int   array[count]; //arreglo de tamaño de Locales Ocupados
     int     i, j, ctr = 0;
-	int n = sizeof(array)/sizeof(array[0]); 
+	int n = sizeof(array)/sizeof(array[0]); //saco el tamaño del arreglo
     f = fopen("Trabajadores.txt", "a+");
 	fs = fopen("TrabajadoresSorteado.txt", "a+");
     while((!feof(f)) && (ctr < count))
@@ -372,7 +384,7 @@ void ordenarInventario(local **arreglo ){
 	
     int   array[count];
     int     i, j, ctr = 0;
-	int n = sizeof(array)/sizeof(array[0]); 
+	int n = sizeof(array)/sizeof(array[0]); //saco el tamaño del arreglo
     f = fopen("Inventario.txt", "a+");
     fs = fopen("InventarioSorteado.txt", "a+");
 
@@ -402,7 +414,7 @@ void ordenarVentas(local **arreglo ){
 	
     int   array[count];
     int     i, j, ctr = 0;
-	int n = sizeof(array)/sizeof(array[0]); 
+	int n = sizeof(array)/sizeof(array[0]); //saco el tamaño del arreglo
     f = fopen("Ventas.txt", "a+");
     fs = fopen("VentasSorteado.txt", "a+");
 
@@ -420,6 +432,37 @@ void ordenarVentas(local **arreglo ){
 	fclose(fs); 
 	fclose(fileCont);
 }
+
+void ordenarRangoPrecios(local **arreglo ){
+	FILE    *f;
+	FILE    *fs;
+	FILE    *fileCont;
+	
+	int count;
+    fileCont = fopen("Cont.txt", "r+");
+    fscanf(fileCont, "%d", &count); 
+	
+    int   array[count];
+    int     i, j, ctr = 0;
+	int n = sizeof(array)/sizeof(array[0]); //saco el tamaño del arreglo
+    f = fopen("RangoPrecio.txt", "a+");
+    fs = fopen("RangoSorteado.txt", "a+");
+
+    while((!feof(f)) && (ctr < count))
+    {
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
+    }
+    
+	selectionSort(array,n);
+	fprintf(fs, "Sorteado:   ");
+	for(j=0;j<count;j++){
+		fprintf(fs, "%d  ", array[j]); //Imprimo array sorteado en el archivo
+     }
+	fclose(f); 
+	fclose(fs); 
+	fclose(fileCont);
+}
+
 
 void saveCC(local **arreglo, int pisos, int localesPiso, char* fn){
     int i, j;

@@ -108,6 +108,9 @@ int main(){
           	case 15:
           		ordenarVentas(arreglo);
           		break;
+          	case 16:
+          		ordenarRangoPrecios(arreglo);
+          		break;
           	
  
       }

@@ -111,7 +111,25 @@ void mergeSort(int arr[], int l, int r)
         mergeSort(arr, m+1, r); 
         merge(arr, l, m, r); 
     } 
-}  
+}
+
+void selectionSort(int arr[], int n) 
+{ 
+    int i, j, min_idx; 
+  
+    
+    for (i = 0; i < n-1; i++) 
+    { 
+        
+        min_idx = i; 
+        for (j = i+1; j < n; j++) 
+          if (arr[j] < arr[min_idx]) 
+            min_idx = j; 
+  
+        
+        swap(&arr[min_idx], &arr[i]); 
+    } 
+}   
 
 
 
