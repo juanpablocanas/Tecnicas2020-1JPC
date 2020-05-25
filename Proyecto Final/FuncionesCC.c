@@ -124,10 +124,9 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	FILE    *fileCont;
     fileCont = fopen("Cont.txt", "r+");
     fscanf(fileCont, "%d", &count); //Guardo lo que esta en el arhhivo cont.txt y se lo pongo   count
-    //printf("Contador antes: %d",count);
-	fclose(fileCont); // Cierro el archivo ya que lo tengo que abrir en W
-					 // 
-	 idLocal=rand()/10;
+	fclose(fileCont); // Cierro el archivo ya que lo tengo que abrir despues en W
+					
+	idLocal=rand()/10;
 	
 	printf("Piso: "); 
 	scanf("%d", &pisoDeseado);
@@ -172,6 +171,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	arreglo[pisoDeseado][localDeseado].categoria = cat;
 	arreglo[pisoDeseado][localDeseado].numEmpleados = numEmpleados;
 	arreglo[pisoDeseado][localDeseado].inventario= inventario;
+	arreglo[pisoDeseado][localDeseado].ventas=ventas;
 	
 	
 	
@@ -180,27 +180,27 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	fprintf(fileTrabajadores, " %d  ", numEmpleados);
 	fclose(fileTrabajadores);
 	printf("\n");
-	
+	//Guardo el numero de trabajadores para organizar despues
 	
 	FILE    *fileInventario;
     fileInventario = fopen("Inventario.txt", "ab");
 	fprintf(fileTrabajadores, " %d  ", inventario);
 	fclose(fileInventario);
+	//Guardo el numero de inventario para organizar despues
 	
 	FILE    *fileVentas;
     fileVentas = fopen("Ventas.txt", "ab");
 	fprintf(fileVentas, " %d  ", ventas);
 	fclose(fileVentas);
+	//Guardo el numero de ventas para organizar despues
 	
 	fileCont = fopen("Cont.txt", "w");
 	count=count+1;
     fprintf(fileCont, "%d", count);
-	//fprintf(fileCont, " %d  ", *cantLocales);
 	printf("Contador despues: %d",count);
 	fclose(fileCont);
-	
-	
-	
+	//Guardo el numero locales ocupados en un TXT para tenerlo asi la consola se cierre
+
 	return;
 }
 
@@ -214,9 +214,10 @@ void mostrarTodosLocal(local **arreglo,int pisos, int localesPiso){
 				printf("Nombre: %s ",arreglo[i][j].nombreLocal);
 				printf("Piso: %d ",arreglo[i][j].pisoLocal+1);
 				printf("Num Local %d ",arreglo[i][j].numLocalxPiso+1);
+				printf("Ventas: %d ",arreglo[i][j].ventas);
 				//cat=getCategoria(arreglo[i][j].categoria);
 				//printf("%d",cat);
-				//printf("Categoria %d", getCategoria(&arreglo[i][j].categoria));
+				printf("Categoria %s", getCategoria(arreglo[i][j].categoria));
 				printf("ID Unico %d ",arreglo[i][j].idLocal);
 				printf("Num Empleados: %d ",arreglo[i][j].numEmpleados);
 				printf("Inventario: %d ",arreglo[i][j].inventario);
@@ -331,19 +332,19 @@ void ordenarTrabajadoresQuickSort(local **arreglo ){
     fileCont = fopen("Cont.txt", "r+");
     fscanf(fileCont, "%d", &count); 
 	
-    int   array[count];
+    int   array[count]; //arreglo de tamaño de Locales Ocupados
     int     i, j, ctr = 0;
 	int n = sizeof(array)/sizeof(array[0]); 
     f = fopen("Trabajadores.txt", "a+");
 	fs = fopen("TrabajadoresSorteado.txt", "a+");
     while((!feof(f)) && (ctr < count))
     {
-        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros de Trabajadores Guardado en array
     }
-    quickSort(array,0,n-1);
+    quickSort(array,0,n-1); //Llamo al sort con el arreglo donde cargue lo del TXT
 	fprintf(fs, "Sorteado:   ");
 	for(j=0;j<count;j++){
-		fprintf(fs, "%d  ", array[j]);
+		fprintf(fs, "%d  ", array[j]);  //Imprimo el arreglo en Trabajadores Sorteado
      }
 	fclose(f); 
 	fclose(fs); 
@@ -351,9 +352,9 @@ void ordenarTrabajadoresQuickSort(local **arreglo ){
 }
 
 void ordenarInventario(local **arreglo ){
-	FILE    *f;
-	FILE    *fs;
-	FILE    *fileCont;
+	FILE    *f; //Invenario Guardado
+	FILE    *fs; //Inventario Sorteadp
+	FILE    *fileCont; //Contador Locales
 	
 	int count;
     fileCont = fopen("Cont.txt", "r+");
@@ -367,13 +368,13 @@ void ordenarInventario(local **arreglo ){
 
     while((!feof(f)) && (ctr < count))
     {
-        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros en array
+        fscanf(f, "%d ", &array[ctr++]); // Cargo todos los numeros de Inventario Guardado en array
     }
     
 	insertionSort(array,n);
 	fprintf(fs, "Sorteado:   ");
 	for(j=0;j<count;j++){
-		fprintf(fs, "%d  ", array[j]); //Imprimo array sorteado en el archivo
+		fprintf(fs, "%d  ", array[j]); //Imprimo array sorteado en el archivo en Inventario Sorteado
      }
 	fclose(f); 
 	fclose(fs); 

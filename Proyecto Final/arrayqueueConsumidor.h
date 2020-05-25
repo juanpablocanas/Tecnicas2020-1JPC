@@ -6,6 +6,9 @@
 #define CAP 100
 
 #define PRINT(x) " (%s %d %d) ", x.nombre, x.id, x.edad
+typedef enum coronaFree{
+   libre, noLibre
+}corona_free_e;
 
 typedef struct Queue Queue;
 typedef struct consumidor consumidor;
@@ -15,6 +18,7 @@ struct consumidor{
 	char nombre[10];
 	int id;
 	int edad;
+	corona_free_e coronaFree;
 	
 };
 

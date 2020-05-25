@@ -12,9 +12,7 @@ typedef enum categoria{
    ROPA, HOGAR, ELECTRODOMESTICOS
 }categoria_e;
 
-typedef enum coronaFree{
-   libre, noLibre
-}corona_free_e;
+
 
 typedef enum opc_validacion{
  	POSITIVO, MINIMO, MAXIMO
@@ -32,6 +30,9 @@ typedef struct Local{
 	int numEmpleados;
 	int inventario;
 	int ventas;
+	
+	
+	
 	// Completelo con lo que quiera
 } local;
 

@@ -5,32 +5,33 @@ int main(){
 	int cargar;
 	int pisos, localesPiso;
 	local **arreglo;
+	int corona;
 	
 	do{
-		printf("Cargar Arhivo? 1.Si  2.No");
+		printf("Cargar Arhivo? 1.Si  2.No ");
 		scanf("%d",&cargar);
 		switch(cargar){
 			case 1: ;
 				FILE *filePisosr = fopen("NumPisos.txt","r");
 				FILE *fileLocalesr = fopen("NumLocales.txt","r");
 				fscanf(filePisosr,"%d",&pisos);
-				fscanf(fileLocalesr,"%d",&localesPiso);
+				fscanf(fileLocalesr,"%d",&localesPiso);         //De la ejecuccion anterior escribo los pisos y locales piso en las respectivas variables
 				fclose(filePisosr); fclose(fileLocalesr);
-				arreglo= crearCC(pisos,localesPiso);
-				loadCC(arreglo,pisos,localesPiso,"CentroC.dat");
+				arreglo= crearCC(pisos,localesPiso);  //Creo CC de todos modos para tenerla vacia
+				loadCC(arreglo,pisos,localesPiso,"CentroC.dat");  //Cargo el CC creado en la linea anterior con LoadCC
 				break;
 				
 			case 2: ;
-				FILE *fileDatos= fopen("CentroC.dat","w");
+				FILE *fileDatos= fopen("CentroC.dat","w"); // Lo abro y cierro de una con W para borrar cualquier cosa que este en el archivo
 				fclose(fileDatos);
 				printf("Numero de pisos: ");
     			scanf("%d", &pisos);
     			printf("Numero de locales por piso: ");
     			scanf("%d", &localesPiso);
-    			FILE *filePisosw = fopen("NumPisos.txt","w");
+    			FILE *filePisosw = fopen("NumPisos.txt","w");  
 				FILE *fileLocalesw = fopen("NumLocales.txt","w");
 				fprintf(filePisosw,"%d", pisos);
-				fprintf(fileLocalesw,"%d", localesPiso);
+				fprintf(fileLocalesw,"%d", localesPiso); //Escribo a los archivos los pisos y localesPiso para una ejecuccion en el futuro
 				arreglo = crearCC(pisos, localesPiso);
 				fclose(filePisosw); fclose(fileLocalesw);
 				break;
@@ -69,8 +70,18 @@ int main(){
           	ordenarTrabajadoresQuickSort(arreglo);
           	printf("Se han ordenado. Vea el TXT");
           	break;
-          case 9:
-          	printf( "Ingrese nombre consumidor: " ); scanf("%s", c.nombre);
+          case 9:		
+          		printf("Tiene Coronavirus? 1.Si o 2.no"); scanf("%d",&corona);
+          		if(corona==1){
+          			c.coronaFree = noLibre;	
+				  }else if(corona==2){
+				  	c.coronaFree=libre;
+				  }
+				  if(c.coronaFree==noLibre){
+				  	printf("Adios vas a contagiar a los demas. Eres un irresponsable");
+				  	break;
+				  }
+          		printf( "Ingrese nombre consumidor: " ); scanf("%s", c.nombre);
 				printf( "Ingrese id consumidor: " ); scanf("%d", &c.id);
 				printf( "Ingrese  edad consumidor: " ); scanf("%d", &c.edad);
 				fila.put(&fila,c);
