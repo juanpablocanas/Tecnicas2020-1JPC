@@ -37,12 +37,12 @@ typedef struct Local{
 } local;
 
 
- char* getCategoria(int cat){
+ char* getCategoria(categoria_e cat){
  
    switch (cat){
-      case 1: return "Ropa";
-      case 2: return "Hogar";
-      case 3: return "Electrodomesticos";
+      case ROPA: return "Ropa";
+      case HOGAR: return "Hogar";
+      case ELECTRODOMESTICOS: return "Electrodomesticos";
       
    }
 }

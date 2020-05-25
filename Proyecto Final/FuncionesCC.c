@@ -148,7 +148,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 		printf("El local ya esta ocupado intente de nuevo");
 		return;
 	}
-	printf("Categoria: "); scanf("%d", &cat);
+	printf("Categoria 1. Ropa 2. Hogar 3. Electrodomesticos: "); scanf("%d", &cat);
 	printf("Numero empleados: "); scanf("%d", &numEmpleados); 
 	//validarNumeros(*numEmpleados, POSITIVO);
 	//validarNumeros(*numEmpleados, MINIMO);
@@ -168,7 +168,16 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	printf("\n ID Unico: %d", idLocal); 
 	arreglo[pisoDeseado][localDeseado].idLocal=idLocal;
 	printf("\n");
-	arreglo[pisoDeseado][localDeseado].categoria = cat;
+	if(cat==1){
+		arreglo[pisoDeseado][localDeseado].categoria=ROPA;
+	}
+	else if(cat==2){
+		arreglo[pisoDeseado][localDeseado].categoria=HOGAR;
+	}
+	else if(cat==3){
+		arreglo[pisoDeseado][localDeseado].categoria=ELECTRODOMESTICOS;
+	}
+	//arreglo[pisoDeseado][localDeseado].categoria = cat;
 	arreglo[pisoDeseado][localDeseado].numEmpleados = numEmpleados;
 	arreglo[pisoDeseado][localDeseado].inventario= inventario;
 	arreglo[pisoDeseado][localDeseado].ventas=ventas;
@@ -198,6 +207,7 @@ void agregarLocal(local **arreglo, int pisos, int localesPiso){
 	count=count+1;
     fprintf(fileCont, "%d", count);
 	printf("Contador despues: %d",count);
+	
 	fclose(fileCont);
 	//Guardo el numero locales ocupados en un TXT para tenerlo asi la consola se cierre
 
